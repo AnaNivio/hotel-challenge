@@ -16,33 +16,36 @@ import java.util.List;
  * so I wouldn't have to put a sevice over and over again in every room. I will try to implement it
   * later.*/
 @Entity
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="rooms")
+@Data
 public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id")
     private Integer roomId;
 
     @NotNull(message = "An amount of beds for the room must be specified")
+    @Column(name = "beds_amount")
     private Integer bedsAmount;
 
     @NotNull(message = "A price for the room must be specified")
+    @Column(name = "price")
     private float price;
 
-    @Value("${default-avaiablity}")
-    private boolean avaiable;
+    @Column(name = "avaiable")
+    private Boolean avaiable = true;
+
     // if it isn't avaiable, we have to put the reason why
-    @Value("${default-reason}")
-    private String reasonOutOfOrder;
+    @Column(name = "reason")
+    private String reasonOutOfOrder = "";
 
-    @Value("${default-occupation}")
-    private boolean occupied;
+    @Column(name = "occupied")
+    private Boolean occupied = false;
 
-    @NotNull(message = "A list of services for the room must be specified")
-    private List<String> services;
     /* ORIGINAL IDEA
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "reservationRoom")
     @JsonManagedReference
@@ -50,7 +53,7 @@ public class Room {
     */
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "reservationRoom")
-    @JsonManagedReference
+    @JsonManagedReference(value = "reservation-room")
     private List<Reservation> reservations;
 
 }
