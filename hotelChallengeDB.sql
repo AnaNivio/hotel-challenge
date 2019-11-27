@@ -8,6 +8,7 @@ create table rooms(
     avaiable Boolean,
     occupied Boolean,
     reason varchar(50),
+    services varchar(250)
 
 	constraint pk_rooms primary key(room_id)
 
