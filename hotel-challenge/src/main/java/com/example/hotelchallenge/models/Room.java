@@ -36,6 +36,10 @@ public class Room {
     @Column(name = "price")
     private float price;
 
+    @NotNull(message = "Services for the room must be specified")
+    @Column(name = "services")
+    private String services;
+
     @Column(name = "avaiable")
     private Boolean avaiable = true;
 
@@ -45,12 +49,6 @@ public class Room {
 
     @Column(name = "occupied")
     private Boolean occupied = false;
-
-    /* ORIGINAL IDEA
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "reservationRoom")
-    @JsonManagedReference
-    private List<Reservation> reservations;
-    */
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "reservationRoom")
     @JsonManagedReference(value = "reservation-room")
