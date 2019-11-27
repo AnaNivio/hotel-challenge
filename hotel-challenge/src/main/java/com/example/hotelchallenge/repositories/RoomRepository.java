@@ -117,20 +117,12 @@ public class RoomRepository {
 
     }
     
-    public Room deleteRoom(Integer id) throws Exception {
-        Room roomEreased;
+    public void deleteRoom(Integer id) throws Exception {
 
         PreparedStatement ps= connection.prepareStatement("delete from rooms where room_id=?");
         ps.setInt(1,id);
 
-        ResultSet rs= ps.executeQuery();
-        if(rs.next()){
-            roomEreased=getRoom(rs);
-        } else {
-            throw new Exception("An error has occured; room couldn't be erased");
-        }
-
-        return roomEreased;
+        ps.executeUpdate();
 
     }
 

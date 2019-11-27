@@ -37,8 +37,8 @@ public class RoomService {
         return roomRepository.updateRoom(updatedRoom);
     }
 
-    public Room deleteRoom(Integer id) throws Exception{
-        return roomRepository.deleteRoom(id);
+    public void deleteRoom(Integer id) throws Exception{
+        roomRepository.deleteRoom(id);
     }
 
     public List<Room> getRooms() throws SQLException {

@@ -6,6 +6,7 @@ import com.example.hotelchallenge.exceptions.RoomNotFound;
 import com.example.hotelchallenge.models.Room;
 import com.example.hotelchallenge.services.RoomService;
 import lombok.Data;
+import org.omg.CORBA.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -99,10 +100,10 @@ public class RoomController {
     }
 
     @RequestMapping(value = "/room/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Room> deleteRooms(@PathVariable("id") Integer idRoom) {
+    public ResponseEntity<Any> deleteRooms(@PathVariable("id") Integer idRoom) {
         try{
-            Room erasedRoom = service.deleteRoom(idRoom);
-            return ResponseEntity.ok(erasedRoom);
+            service.deleteRoom(idRoom);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
