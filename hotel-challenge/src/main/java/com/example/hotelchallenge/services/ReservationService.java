@@ -17,10 +17,20 @@ public class ReservationService  {
         this.reservationRepository = repository;
     }
 
+    /**
+     * Adapter between controller and repository for creating proccess
+     * @param reservation
+     * @return Reservation
+     * */
     public Reservation createReservation(Reservation reservation) throws Exception {
         return reservationRepository.createReservation(reservation);
     }
 
+    /**
+     * Adapter between controller and repository for deleting proccess
+     * @param reservationId
+     * @return Reservation
+     * */
     public void deleteReservation(Integer reservationId) throws Exception {
         reservationRepository.deleteReservation(reservationId);
     }

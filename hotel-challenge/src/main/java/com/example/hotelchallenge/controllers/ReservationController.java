@@ -26,10 +26,17 @@ public class ReservationController {
     private final ReservationService service;
 
     @Autowired
-    public ReservationController(@Qualifier("reservServ")ReservationService service) {
+    public ReservationController(@Qualifier("reservServ") ReservationService service) {
         this.service = service;
     }
 
+    /**
+     * Create a reservation with the information passed in param.
+     * @param reservation
+     * @return ResponseEntity<Reservation>
+     *     - HttpStatus.INTERNAL_SERVER_ERROR : Failed to create reservation
+     *     - HttpStatus.CREATED : Reservation created succesfully
+     *     */
     @RequestMapping(value = "/reservation", method = RequestMethod.POST)
     public ResponseEntity<Reservation> cereateReservation(@Valid @RequestBody Reservation reservation) {
         try {
@@ -40,6 +47,13 @@ public class ReservationController {
         }
     }
 
+    /**
+     * Delete a reservation with the information passed in param (it deletes all the info in database).
+     * @param reservationId
+     * @return ResponseEntity<Reservation>
+     *     - HttpStatus.INTERNAL_SERVER_ERROR : Failed to delete reservation
+     *     - HttpStatus.CREATED : Reservation deleted succesfully
+     *     */
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Any> deleteReservation(@PathVariable("id") Integer reservationId) {
 

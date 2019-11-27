@@ -40,6 +40,10 @@ public class Room {
     @Column(name = "services")
     private String services;
 
+    /*Instead of having two attributes that represents if the room it's being cleaned or passed through
+     a maintenance process, we have an attribute that indicates if the room it's available or not.
+     I made it this way because we can describe any reason
+    * why the room is unavailable without having to be because of cleanse or maintenance*/
     @Column(name = "avaiable")
     private Boolean avaiable = true;
 
