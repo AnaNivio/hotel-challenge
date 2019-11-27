@@ -1,5 +1,8 @@
 package com.example.hotelchallenge.controllers;
 
+import com.example.hotelchallenge.exceptions.NotAvaiableRoom;
+import com.example.hotelchallenge.exceptions.OccupiedRoom;
+import com.example.hotelchallenge.exceptions.RoomNotFound;
 import com.example.hotelchallenge.models.Room;
 import com.example.hotelchallenge.services.RoomService;
 import lombok.Data;
@@ -40,12 +43,30 @@ public class RoomController {
     }
 
     @RequestMapping(value = "/room/{id}/avaiability", method = RequestMethod.PUT)
-    public ResponseEntity<Room> updateAvaiabilityRoom(@PathVariable("id") Integer idRoom) {
+    public ResponseEntity<Room> updateAvaiabilityRoom(@PathVariable("id") Integer idRoom, @RequestBody String reason) {
         try {
-            Room updatedRoom = service.updateAvaiabilityRoom(idRoom);
+            Room updatedRoom = service.updateAvaiabilityRoom(idRoom, reason);
             return ResponseEntity.ok(updatedRoom);
 
-        } catch (Exception e) {
+        }  catch (RoomNotFound e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (OccupiedRoom e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @RequestMapping(value = "/room/{id}/occupied", method = RequestMethod.PUT)
+    public ResponseEntity<Room> updateStateRoom(@PathVariable("id") Integer idRoom) {
+        try {
+            Room updatedRoom = service.updateStateRoom(idRoom);
+            return ResponseEntity.ok(updatedRoom);
+        } catch (RoomNotFound e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (NotAvaiableRoom e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

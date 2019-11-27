@@ -1,5 +1,7 @@
 package com.example.hotelchallenge.repositories;
 
+import com.example.hotelchallenge.exceptions.NotAvaiableRoom;
+import com.example.hotelchallenge.exceptions.OccupiedRoom;
 import com.example.hotelchallenge.exceptions.RoomNotFound;
 import com.example.hotelchallenge.models.Room;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,7 @@ public class RoomRepository {
 
     public Room updateRoom(Room updatedRoom) throws Exception{
 
-        PreparedStatement ps=connection.prepareStatement("update rooms set beds_amount = ?, price = ?, avaiable = ?, reason = ?, occupied = ? where id_room= ?");
+        PreparedStatement ps=connection.prepareStatement("update rooms set beds_amount = ?, price = ?, avaiable = ?, reason = ?, occupied = ? where id_updatedRoom= ?");
         ps.setInt(1,updatedRoom.getBedsAmount());
         ps.setFloat(2,updatedRoom.getPrice());
         ps.setBoolean(3,updatedRoom.getAvaiable());
@@ -50,59 +52,83 @@ public class RoomRepository {
 
         ps.executeUpdate();
 
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()) {
-            updatedRoom.setRoomId(rs.getInt(1));
-        } else {
-            throw new Exception("An error has occured; room couldn't be updated");
+        return updatedRoom;
+
+    }
+
+    public Room updateAvaiabilityRoom(Integer roomId, String reason) throws OccupiedRoom,RoomNotFound, SQLException{
+
+        Room updatedRoom = getRoomById(roomId);
+        Boolean value = true;
+        String reasonWhy = reason;
+        PreparedStatement ps;
+
+        if(!updatedRoom.getOccupied()){
+            if(updatedRoom.getAvaiable()){
+                value = false;
+
+            }else if(!updatedRoom.getAvaiable()){
+                value = true;
+                reasonWhy = "";
+            }
+
+            ps=connection.prepareStatement("update rooms set avaiable = ?, reason = ? where room_id= ?",Statement.RETURN_GENERATED_KEYS);
+            ps.setBoolean(1,value);
+            ps.setString(2, reasonWhy);
+            ps.setInt(3,updatedRoom.getRoomId());
+
+            ps.executeUpdate();
+            updatedRoom.setAvaiable(value);
+            updatedRoom.setReasonOutOfOrder(reasonWhy);
+        }else{
+            throw new OccupiedRoom(null);
         }
 
         return updatedRoom;
 
     }
 
-    public Room updateAvaiabilityRoom(Integer roomId) throws Exception{
+    public Room updateStateRoom(Integer roomId) throws NotAvaiableRoom,RoomNotFound,SQLException{
 
         Room updatedRoom = getRoomById(roomId);
         Boolean value;
 
         if(updatedRoom.getAvaiable()){
-            value = false;
+            if(updatedRoom.getOccupied()){
+                value = false;
+            }else{
+                value = true;
+            }
+
+            PreparedStatement ps=connection.prepareStatement("update rooms set occupied = ? where room_id= ?",Statement.RETURN_GENERATED_KEYS);
+            ps.setBoolean(1,value);
+            ps.setInt(2,updatedRoom.getRoomId());
+
+            ps.executeUpdate();
+            updatedRoom.setOccupied(value);
         }else{
-            value = true;
+            throw new NotAvaiableRoom(null);
         }
 
-        PreparedStatement ps=connection.prepareStatement("update rooms set avaiable = ? where id_room= ?");
-        ps.setBoolean(1,value);
-        ps.setInt(2,updatedRoom.getRoomId());
-
-        ps.executeUpdate();
-
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()) {
-            updatedRoom.setRoomId(rs.getInt(1));
-        } else {
-            throw new Exception("An error has occured; room couldn't be updated");
-        }
 
         return updatedRoom;
 
     }
     
     public Room deleteRoom(Integer id) throws Exception {
-        Room borrado=new Room();
+        Room roomEreased;
 
         PreparedStatement ps= connection.prepareStatement("delete from rooms where room_id=?");
         ps.setInt(1,id);
 
         ResultSet rs= ps.executeQuery();
         if(rs.next()){
-            borrado=getRoom(rs);
+            roomEreased=getRoom(rs);
         } else {
             throw new Exception("An error has occured; room couldn't be erased");
         }
 
-        return borrado;
+        return roomEreased;
 
     }
 

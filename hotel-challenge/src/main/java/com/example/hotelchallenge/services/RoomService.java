@@ -1,5 +1,8 @@
 package com.example.hotelchallenge.services;
 
+import com.example.hotelchallenge.exceptions.NotAvaiableRoom;
+import com.example.hotelchallenge.exceptions.OccupiedRoom;
+import com.example.hotelchallenge.exceptions.RoomNotFound;
 import com.example.hotelchallenge.models.Room;
 import com.example.hotelchallenge.repositories.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,12 @@ public class RoomService {
         return roomRepository.addRoom(room);
     }
 
-    public Room updateAvaiabilityRoom(Integer idRoom) throws Exception{
-        return roomRepository.updateAvaiabilityRoom(idRoom);
+    public Room updateAvaiabilityRoom(Integer idRoom,String reason) throws OccupiedRoom, RoomNotFound,SQLException{
+        return roomRepository.updateAvaiabilityRoom(idRoom, reason);
+    }
+
+    public Room updateStateRoom(Integer idRoom) throws NotAvaiableRoom,RoomNotFound,SQLException{
+        return roomRepository.updateStateRoom(idRoom);
     }
 
     public Room updateRoom(Room updatedRoom) throws Exception {
