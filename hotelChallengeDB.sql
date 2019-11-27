@@ -41,7 +41,6 @@ create table reservations(
 	references guests(guest_id)
 );
 
-
 -- see if this needs to have specified on delete and update cascade like in models
     -- ON DELETE CASCADE
     -- ON UPDATE CASCADE
