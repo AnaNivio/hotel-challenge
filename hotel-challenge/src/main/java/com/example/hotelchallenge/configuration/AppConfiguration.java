@@ -1,7 +1,10 @@
 package com.example.hotelchallenge.configuration;
 
 import com.example.hotelchallenge.controllers.RoomController;
+import com.example.hotelchallenge.models.Reservation;
+import com.example.hotelchallenge.repositories.ReservationRepository;
 import com.example.hotelchallenge.repositories.RoomRepository;
+import com.example.hotelchallenge.services.ReservationService;
 import com.example.hotelchallenge.services.RoomService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +37,15 @@ public class AppConfiguration {
         return new RoomService(roomRepository);
     }
 
+    @Bean("reservRepo")
+    public ReservationRepository getReservationRepository(Connection connection){
+        return new ReservationRepository(connection);
+    }
+
+    @Bean("reservServ")
+    public ReservationService getReservationService(ReservationRepository reservationRepository){
+        return new ReservationService(reservationRepository);
+    }
 
 
 }
