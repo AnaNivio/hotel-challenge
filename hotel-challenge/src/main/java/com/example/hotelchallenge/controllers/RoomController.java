@@ -71,9 +71,10 @@ public class RoomController {
         }
     }
 
-    @RequestMapping(value = "/room", method = RequestMethod.PUT)
-    public ResponseEntity<Room> updateRoom(@Valid @RequestBody Room updatedRoom) {
+    @RequestMapping(value = "/room/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Room> updateRoom(@PathVariable("id") Integer idRoom, @Valid @RequestBody Room updatedRoom) {
         try {
+            updatedRoom.setRoomId(idRoom);
             service.updateRoom(updatedRoom);
             return ResponseEntity.ok(updatedRoom);
 
