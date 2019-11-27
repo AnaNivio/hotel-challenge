@@ -21,7 +21,7 @@ public class ReservationService  {
         return reservationRepository.createReservation(reservation);
     }
 
-    public Reservation deleteReservation(Integer reservationId) throws Exception {
-        return reservationRepository.deleteReservation(reservationId);
+    public void deleteReservation(Integer reservationId) throws Exception {
+        reservationRepository.deleteReservation(reservationId);
     }
 }

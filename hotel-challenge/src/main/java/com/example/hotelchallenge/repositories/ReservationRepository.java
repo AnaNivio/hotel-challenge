@@ -37,51 +37,15 @@ public class ReservationRepository {
         return reservation;
     }
 
-    public Reservation deleteReservation(Integer id) throws Exception {
-        Reservation reservationEreased = getReservationById(id);
+    public void deleteReservation(Integer id) throws Exception {
 
         PreparedStatement ps= connection.prepareStatement("delete from reservations where reservation_id=?");
         ps.setInt(1,id);
 
-        ps.executeQuery();
-
-        return reservationEreased;
+        ps.executeUpdate();
 
     }
 
-    public Reservation getReservationById(Integer id) throws Exception {
-        Reservation reservationFound;
-
-        PreparedStatement ps= connection.prepareStatement("select * from reservations reserv inner join rooms r\n" +
-                "on reserv.room_id = r.room_id\n" +
-                "inner join guests g\n" +
-                "on reserv.guest_id = g.guest_id\n" +
-                "where reserv.reservation_id = ?;");
-        ps.setInt(1,id);
-
-        ResultSet rsBuilder = ps.executeQuery();
-        Room room = new Room();
-        room.setRoomId(rsBuilder.getInt("room_id"));
-        room.setAvaiable(rsBuilder.getBoolean("avaible"));
-        room.setReasonOutOfOrder(rsBuilder.getString("reason"));
-        room.setBedsAmount(rsBuilder.getInt("beds_amount"));
-        room.setPrice(rsBuilder.getFloat("price"));
-        room.setOccupied(rsBuilder.getBoolean("occupied"));
-        room.setServices(rsBuilder.getString("services"));
-
-        Guest guest = new Guest();
-        guest.setGuestId(rsBuilder.getInt("guest_id"));
-        guest.setName(rsBuilder.getString("name"));
-        guest.setSurname(rsBuilder.getString("surname"));
-        guest.setDni(rsBuilder.getString("dni"));
-        guest.setCity(rsBuilder.getString("city"));
-        guest.setNumber(rsBuilder.getString("number"));
-
-        reservationFound = getReservation(rsBuilder, guest, room);
-
-        return reservationFound;
-
-    }
     private Reservation getReservation(ResultSet rs, Guest guest, Room room) throws SQLException {
 
         return Reservation.builder()

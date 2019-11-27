@@ -5,6 +5,7 @@ import com.example.hotelchallenge.models.Room;
 import com.example.hotelchallenge.services.ReservationService;
 import com.example.hotelchallenge.services.RoomService;
 import lombok.Data;
+import org.omg.CORBA.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -40,11 +41,11 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Reservation> deleteReservation(@PathVariable("id") Integer reservationId) {
+    public ResponseEntity<Any> deleteReservation(@PathVariable("id") Integer reservationId) {
 
         try {
-            Reservation deleteReservation= service.deleteReservation(reservationId);
-            return ResponseEntity.ok(deleteReservation);
+            service.deleteReservation(reservationId);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
