@@ -23,32 +23,34 @@ public class RoomRepository {
 
     public Room addRoom(Room room) throws Exception {
 
-        PreparedStatement ps = connection.prepareStatement("insert into rooms (beds_amount, price, avaiable, reason, occupied) values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement ps = connection.prepareStatement("insert into rooms (beds_amount, price, avaiable, reason, occupied, services) values (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, room.getBedsAmount());
         ps.setFloat(2, room.getPrice());
         ps.setBoolean(3, room.getAvaiable());
         ps.setString(4, room.getReasonOutOfOrder());
         ps.setBoolean(5, room.getOccupied());
+        ps.setString(6, room.getServices());
 
         ps.executeUpdate();
         ResultSet rs = ps.getGeneratedKeys();
         if (rs.next()) {
             room.setRoomId(rs.getInt(1));
         } else {
-            throw new Exception("No se agrego el room");
+            throw new Exception("An error has occured; room couldn't be created");
         }
         return room;
     }
 
     public Room updateRoom(Room updatedRoom) throws Exception{
 
-        PreparedStatement ps=connection.prepareStatement("update rooms set beds_amount = ?, price = ?, avaiable = ?, reason = ?, occupied = ? where id_updatedRoom= ?");
+        PreparedStatement ps=connection.prepareStatement("update rooms set beds_amount = ?, price = ?, avaiable = ?, reason = ?, occupied = ?, services = ? where id_updatedRoom= ?");
         ps.setInt(1,updatedRoom.getBedsAmount());
         ps.setFloat(2,updatedRoom.getPrice());
         ps.setBoolean(3,updatedRoom.getAvaiable());
         ps.setString(4,updatedRoom.getReasonOutOfOrder());
         ps.setBoolean(5,updatedRoom.getOccupied());
-        ps.setInt(6,updatedRoom.getRoomId());
+        ps.setString(6,updatedRoom.getServices());
+        ps.setInt(7,updatedRoom.getRoomId());
 
         ps.executeUpdate();
 
