@@ -1,6 +1,5 @@
 package com.example.hotelchallenge.repositories;
 
-import com.example.hotelchallenge.exceptions.RoomNotFound;
 import com.example.hotelchallenge.models.Guest;
 import com.example.hotelchallenge.models.Reservation;
 import com.example.hotelchallenge.models.Room;
@@ -43,6 +42,8 @@ public class ReservationRepository {
 
         PreparedStatement ps= connection.prepareStatement("delete from reservations where reservation_id=?");
         ps.setInt(1,id);
+
+        ps.executeQuery();
 
         return reservationEreased;
 
