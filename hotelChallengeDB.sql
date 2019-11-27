@@ -36,9 +36,11 @@ create table reservations(
 
     constraint pk_reservations primary key(reservation_id),
 	constraint fk_reservation_room foreign key(room_id) 
-	references rooms(room_id),
+	references rooms(room_id) ON DELETE CASCADE
+    ON UPDATE CASCADE,
     constraint fk_reservation_guest foreign key(guest_id) 
-	references guests(guest_id)
+	references guests(guest_id)ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 -- see if this needs to have specified on delete and update cascade like in models
