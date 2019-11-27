@@ -20,4 +20,8 @@ public class ReservationService  {
     public Reservation createReservation(Reservation reservation) throws Exception {
         return reservationRepository.createReservation(reservation);
     }
+
+    public Reservation deleteReservation(Integer reservationId) throws Exception {
+        return reservationRepository.deleteReservation(reservationId);
+    }
 }
